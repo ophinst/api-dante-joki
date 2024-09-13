@@ -45,7 +45,6 @@ jobs:
           DB_HOST: ${{ secrets.DB_HOST }}
           DB_PORT: ${{ secrets.DB_PORT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          GCP_KEY: ${{ secrets.GCP_KEY }}
           GCP_BUCKET_NAME: ${{ secrets.GCP_BUCKET_NAME }}
           GCP_EMAIL: ${{ secrets.GCP_EMAIL }}
           GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
