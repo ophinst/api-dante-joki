@@ -1,0 +1,25 @@
+# Misc
+.env
+
+# Dependency directories
+node_modules/
+
+# Compiled JavaScript files
+dist/
+
+# TypeScript source map files
+*.d.ts.map
+
+# TypeScript build info file
+tsconfig.tsbuildinfo
+
+# Editor-specific files and folders
+.vscode/
+.idea/
+
+# npm package files
+npm-debug.log
+
+#db-migrations
+migrations/
+config.json
