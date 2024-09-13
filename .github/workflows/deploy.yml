@@ -39,16 +39,16 @@ jobs:
       - name: Prepare environment variables
         run: |
           cat << EOF > env_vars.yaml
-          DB_NAME: ${{ secrets.DB_NAME }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_HOST }}
-          DB_PORT: ${{ secrets.DB_PORT }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          GCP_BUCKET_NAME: ${{ secrets.GCP_BUCKET_NAME }}
-          GCP_EMAIL: ${{ secrets.GCP_EMAIL }}
-          GCP_PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
-          NODE_ENV: ${{ secrets.NODE_ENV }}
+          DB_NAME: "${{ secrets.DB_NAME }}"
+          DB_USERNAME: "${{ secrets.DB_USERNAME }}"
+          DB_PASSWORD: "${{ secrets.DB_PASSWORD }}"
+          DB_HOST: "${{ secrets.DB_HOST }}"
+          DB_PORT: "${{ secrets.DB_PORT }}"
+          JWT_SECRET: "${{ secrets.JWT_SECRET }}"
+          GCP_BUCKET_NAME: "${{ secrets.GCP_BUCKET_NAME }}"
+          GCP_EMAIL: "${{ secrets.GCP_EMAIL }}"
+          GCP_PROJECT_ID: "${{ secrets.GCP_PROJECT_ID }}"
+          NODE_ENV: "${{ secrets.NODE_ENV }}"
           EOF
 
       - name: Deploy Docker Image to Google Cloud Run
