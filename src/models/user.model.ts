@@ -43,10 +43,15 @@ User.init({
         type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
         defaultValue: 0.00,
-	}
+	},
+    role: {
+        type: DataTypes.ENUM("worker", "admin"),
+        allowNull: false,
+        defaultValue: "worker",
+    }
 }, {
 	sequelize,
 	modelName:"user"
 });
 
-export { User };
+export default User;

@@ -5,14 +5,16 @@ import Token from "../models/token.model";
 
 class TokenMiddleware {
 	async RefreshToken (req: Request, res: Response, next:NextFunction, expiredToken:string): Promise<Response|void> {
-		// Get uid from token
 		const decoded = jwt.decode(expiredToken);
 		if (typeof decoded === "object" && decoded !== null && "uid" in decoded) {
 			req.uid = decoded.uid;
+			req.name = decoded.name;
+			req.email = decoded.email;
+			req.role = decoded.role;
 		}
 
-		// Check if old token exist
 		const oldTokenInstance = await Token.findOne({
+			attributes: ["token"],
 			where: {
 				uid: req.uid,
 			},
@@ -23,13 +25,12 @@ class TokenMiddleware {
             });
         }
 
-		// Validate old token and update user token
 		try {
-			const oldToken = oldTokenInstance.refreshToken;
+			const oldToken = oldTokenInstance.get("token");
 			
 			jwt.verify(oldToken, Env.JWT_SECRET);
 
-			const newToken = jwt.sign({ uid: req.uid, name: req.name, email: req.email }, Env.JWT_SECRET, {
+			const newToken = jwt.sign({ uid: req.uid, name: req.name, email: req.email, role: req.role }, Env.JWT_SECRET, {
 				expiresIn: "7d"
 			});
 

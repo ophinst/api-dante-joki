@@ -1,7 +1,6 @@
-import { Sequelize } from "sequelize"; //import sequelize library
-import { Env } from "./env-loader"; //import env variable
+import { Sequelize } from "sequelize";
+import { Env } from "./env-loader";
 
-// create new connection configuration to database
 export const sequelize = new Sequelize({
 	dialect: "postgres",
 	host: Env.DB_HOST,
@@ -12,9 +11,9 @@ export const sequelize = new Sequelize({
 });
 
 try {
-	sequelize.authenticate(); //authenticate using database connection configuration
-	if (Env.NODE_ENV === "development") { // sync the table in database with the one in model files
-		sequelize.sync().then(() => console.log("Database & tables created!"));
+	sequelize.authenticate();
+	if (Env.NODE_ENV === "development") {
+		sequelize.sync({alter: true}).then(() => console.log("Database & tables created!"));
 	}
 } catch (err) {
 	console.error(err);

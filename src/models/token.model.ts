@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../configs/db";
-import { User } from "./user.model";
+import User from "./user.model";
 
 class Token extends Model {
 	public tokenId!: string;

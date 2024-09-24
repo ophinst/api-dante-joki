@@ -4,6 +4,8 @@ import morgan from "morgan";
 
 import { Env } from "./configs/env-loader";
 import AuthRouter from "./routes/auth.router";
+// import AuthMiddleware from "./middleware/auth.middleware";
+import { TransactionRouter } from "./routes/transaction.router";
 
 const port = Env.PORT;
 
@@ -21,6 +23,7 @@ app.disable("x-powered-by");
 app.use(`${globalApiPrefix}/`,
 	express.Router()
 	.use("/auth", AuthRouter)
+	.use("/joki", TransactionRouter)
 );
 
 app.use("/", (req, res) => {

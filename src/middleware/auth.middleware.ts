@@ -14,12 +14,12 @@ class AuthMiddleware {
 			});
 		}
 
-		// Verify the token and decode the payload to get user information
 		try {
 			jwt.verify(token, Env.JWT_SECRET);
 			const decoded = jwt.decode(token);
 			if (typeof decoded === "object" && decoded !== null && "username" in decoded) {
 				req.uid = decoded.uid;
+				req.role = decoded.role;
 			} else {
 				return res.status(401).json({ error: "Token malformed" });
 			}
@@ -32,12 +32,32 @@ class AuthMiddleware {
 				return res.status(403).json({
 					message: "Invalid token"
 				});
+			} else{
+				console.error(error);
+				return res.status(500).json({
+					message: "Internal server error!"
+				});
 			}
-			console.error(error);
-			return res.status(500).json({
-				message: "Internal server error!"
-			});
 		}
+	}
+
+	async VerifyRoles(req: Request, res: Response, next: NextFunction): Promise<Response|void>{
+		try {
+			const role = req.role;
+			if (!role){
+				return res.status(403).json({ message: "Token malformed" });
+			}
+
+			if (role === "admin") {
+                next();
+            } else {
+                return res.status(403).json({ message: "Forbidden" });
+            }
+		} catch (error) {
+			console.error(error);
+			return res.status(500).json({ message: "Internal server error" });
+		}
+		
 	}
 }
 

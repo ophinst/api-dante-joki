@@ -1,4 +1,4 @@
-import { User } from "../models/user.model";
+import User from "../models/user.model";
 import { Request, Response } from "express";
 import { Env } from "../configs/env-loader";
 import { nanoid } from "nanoid";
@@ -9,33 +9,25 @@ import Token from "../models/token.model";
 class AuthController {
 	async UserRegister(req: Request, res: Response): Promise<Response> {
 		try {
-			const { fullName, username, email, password, confirmPassword, phoneNumber } = req.body;
+			const { fullName, username, email, password, confirmPassword, phoneNumber, role } = req.body;
 
-			// Check if user already exists
 			const userExists = await User.findOne({ where: { email } });
 			if (userExists) {
 				return res.status(400).json({ message: "Email already exists" });
 			}
 
-			// Check if passwords match
 			if (password !== confirmPassword) {
 				return res.status(400).json({ message: "Passwords do not match" });
 			}
 
-			// Validate email format
 			const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 			if (!emailRegex.test(email)) {
 				return res.status(400).json({ message: "Invalid email format" });
 			}
 
-			// Hash password
 			const hashedPassword = await bcrypt.hash(password, await bcrypt.genSalt());
 
-			// Create uid
-			const uid = "jbd-" + nanoid(10);
-			// console.log(Env.DB_HOST! + Env.JWT_SECRET);
-
-			// Create new user
+			const uid = "UJD" + nanoid(10);
 			const newUser = await User.create({
 				uid,
 				fullName,
@@ -43,10 +35,9 @@ class AuthController {
 				email,
 				password: hashedPassword,
 				phoneNumber,
-				role: "user",
+				role,
 			});
 
-			// Create user current session token and refresh token
 			const tokenId = "tkn-" + nanoid(10);
 			const token = jwt.sign({ uid, email, username }, Env.JWT_SECRET, { expiresIn: "24h" });
 			const refreshToken = jwt.sign({ uid, email, username }, Env.JWT_SECRET, { expiresIn: "7d" });
@@ -65,6 +56,7 @@ class AuthController {
                     email: newUser.email,
                     phoneNumber: newUser.phoneNumber,
                     role: newUser.role,
+					token: token
 				}
 			});
 		} catch (error) {
@@ -77,13 +69,11 @@ class AuthController {
 		try {
 			const { email, password } = req.body;
 
-			// Check if user exists
 			const user = await User.findOne({ where: { email } });
 			if (!user) {
 				return res.status(404).json({ message: "User not found" });
 			}
 
-			// Check if password matches
 			const isMatch = await bcrypt.compare(password, user.password);
 			if (!isMatch) {
 				return res.status(400).json({ message: "Invalid credentials" });
@@ -91,11 +81,11 @@ class AuthController {
 			
 			const uid = user.uid;
 			const username = user.username;
+			const role = user.role;
 
-			// Create user current session token and refresh token
 			const tokenId = "tkn-" + nanoid(10);
-			const token = jwt.sign({ uid, email, username }, Env.JWT_SECRET, { expiresIn: "24h" });
-			const refreshToken = jwt.sign({ uid, email, username }, Env.JWT_SECRET, { expiresIn: "7d" });
+			const token = jwt.sign({ uid, email, username, role }, Env.JWT_SECRET, { expiresIn: "24h" });
+			const refreshToken = jwt.sign({ uid, email, username, role }, Env.JWT_SECRET, { expiresIn: "7d" });
 			await Token.create({
 				tokenId: tokenId,
 				uid,
@@ -108,6 +98,7 @@ class AuthController {
 					uid,
                     email,
                     username,
+					role,
                     token
 				}
 			});
