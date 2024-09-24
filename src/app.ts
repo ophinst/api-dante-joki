@@ -3,9 +3,10 @@ import cors from "cors";
 import morgan from "morgan";
 
 import { Env } from "./configs/env-loader";
-import AuthRouter from "./routes/auth.router";
-// import AuthMiddleware from "./middleware/auth.middleware";
+import AuthMiddleware from "./middleware/auth.middleware";
+import { AuthRouter } from "./routes/auth.router";
 import { TransactionRouter } from "./routes/transaction.router";
+import { UserRouter } from "./routes/user.router";
 
 const port = Env.PORT;
 
@@ -24,6 +25,7 @@ app.use(`${globalApiPrefix}/`,
 	express.Router()
 	.use("/auth", AuthRouter)
 	.use("/joki", TransactionRouter)
+	.use("/user", AuthMiddleware.VerifyToken, AuthMiddleware.VerifyRoles, UserRouter)
 );
 
 app.use("/", (req, res) => {

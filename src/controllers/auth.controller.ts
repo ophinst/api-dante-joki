@@ -83,6 +83,8 @@ class AuthController {
 			const username = user.username;
 			const role = user.role;
 
+			await Token.destroy({ where: { uid:uid }});
+
 			const tokenId = "tkn-" + nanoid(10);
 			const token = jwt.sign({ uid, email, username, role }, Env.JWT_SECRET, { expiresIn: "24h" });
 			const refreshToken = jwt.sign({ uid, email, username, role }, Env.JWT_SECRET, { expiresIn: "7d" });
