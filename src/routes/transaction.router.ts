@@ -1,6 +1,7 @@
 import * as express from "express";
 import AuthMiddleware from "../middleware/auth.middleware";
 import TransactionController from "../controllers/transaction.controller";
+import UploadMiddleware from "../middleware/upload.middleware";
 
 export const TransactionRouter= express.Router();
 
@@ -10,7 +11,7 @@ TransactionRouter.get("/jokiStatus/owned", AuthMiddleware.VerifyToken, Transacti
 
 TransactionRouter.post("/", TransactionController.CreateJokiTransaction);
 
-TransactionRouter.put("/:id", AuthMiddleware.VerifyToken, TransactionController.UpdateJokiStatus);
+TransactionRouter.put("/jokistatus/:id", AuthMiddleware.VerifyToken, UploadMiddleware.ProcessFiles, TransactionController.UpdateJokiStatus);
 TransactionRouter.put("/paymentStatus/:id", AuthMiddleware.VerifyToken, AuthMiddleware.VerifyRoles, TransactionController.UpdatePaymentStatus);
 
 TransactionRouter.delete("/:id", AuthMiddleware.VerifyToken, AuthMiddleware.VerifyRoles, TransactionController.DeleteJokiTransaction);

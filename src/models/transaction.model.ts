@@ -17,6 +17,7 @@ class Transaction extends Model {
 	public paymentMethod!: string;
 	public paymentStatus!: string;
 	public jokiStatus!: string;
+    public proof?: string;
 }
 
 Transaction.init({
@@ -82,6 +83,10 @@ Transaction.init({
         type: DataTypes.ENUM("onProgress", "actionNeeded", "finished"),
         allowNull: false,
 		defaultValue: "actionNeeded",
+    },
+    proof: {
+        type: DataTypes.STRING,
+        allowNull: true,
     }
 },
 {
