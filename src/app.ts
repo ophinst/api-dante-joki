@@ -7,6 +7,8 @@ import AuthMiddleware from "./middleware/auth.middleware";
 import { AuthRouter } from "./routes/auth.router";
 import { TransactionRouter } from "./routes/transaction.router";
 import { UserRouter } from "./routes/user.router";
+import { WithdrawRouter } from "./routes/withdraw.router";
+import { SupportRouter } from "./routes/support.router";
 
 const port = Env.PORT;
 
@@ -26,6 +28,8 @@ app.use(`${globalApiPrefix}/`,
 	.use("/auth", AuthRouter)
 	.use("/joki", TransactionRouter)
 	.use("/user", AuthMiddleware.VerifyToken, AuthMiddleware.VerifyRoles, UserRouter)
+	.use("/withdraw", AuthMiddleware.VerifyToken, WithdrawRouter)
+	.use("/support", SupportRouter)
 );
 
 app.use("/", (req, res) => {

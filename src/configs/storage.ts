@@ -8,16 +8,14 @@ export default async function uploadFile(file: Express.Multer.File, transactionI
         const bucketName = Env.SUPABASE_BUCKET as string;
         const filePath = `transaction/${transactionId}_${Date.now()}_${file.originalname}`;
         
-        // Attempt to upload the file
         const { data, error } = await supabase.storage.from(bucketName).upload(filePath, file.buffer);
 		console.log(data);
 
         if (error) {
             console.error("Upload error:", error);
-            return null; // Handle the error appropriately
+            return null;
         }
 
-        // Get public URL after successful upload
         const urlData = supabase.storage.from(bucketName).getPublicUrl(filePath);
 
         return urlData.data.publicUrl.toString();
