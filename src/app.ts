@@ -27,7 +27,7 @@ app.use(`${globalApiPrefix}/`,
 	express.Router()
 	.use("/auth", AuthRouter)
 	.use("/joki", TransactionRouter)
-	.use("/user", AuthMiddleware.VerifyToken, AuthMiddleware.VerifyRoles, UserRouter)
+	.use("/user", AuthMiddleware.VerifyToken, UserRouter)
 	.use("/withdraw", AuthMiddleware.VerifyToken, WithdrawRouter)
 	.use("/support", SupportRouter)
 );

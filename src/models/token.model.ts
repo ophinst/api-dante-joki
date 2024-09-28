@@ -36,4 +36,13 @@ Token.init({
 	modelName: "token",
 });
 
+User.hasMany(Token, {
+    foreignKey: "uid",
+    onDelete: "CASCADE"
+});
+
+Token.belongsTo(User, {
+    foreignKey: "uid"
+});
+
 export default Token;
