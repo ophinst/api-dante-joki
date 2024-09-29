@@ -14,7 +14,7 @@ class TokenMiddleware {
 		}
 
 		const oldTokenInstance = await Token.findOne({
-			attributes: ["token"],
+			attributes: ["token", "tokenId"],
 			where: {
 				uid: req.uid,
 			},

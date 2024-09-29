@@ -41,19 +41,19 @@ class WithdrawController {
 		}
 	}
 
-	async GetAllWithdrawRequest(req: Request,res: Response): Promise<Response> {
-		try {
-            const withdrawRequests = await Withdraw.findAll();
+	// async GetAllWithdrawRequest(req: Request,res: Response): Promise<Response> {
+	// 	try {
+    //         const withdrawRequests = await Withdraw.findAll();
 
-            return res.status(200).json({
-                message: "Withdrawal requests retrieved successfully",
-                data: withdrawRequests,
-            });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "Internal server error" });
-        }
-	}
+    //         return res.status(200).json({
+    //             message: "Withdrawal requests retrieved successfully",
+    //             data: withdrawRequests,
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({ message: "Internal server error" });
+    //     }
+	// }
 
 	async GetWithdrawRequestById(req: Request, res: Response): Promise<Response> {
 		try {
@@ -113,6 +113,54 @@ class WithdrawController {
             return res.status(500).json({ message: "Internal server error" });
         }
 	}
+
+    // async GetWithdrawRequestByOwner(req: Request, res: Response): Promise<Response>{
+    //     try {
+    //         const uid = req.uid;
+    //         const withdrawRequests = await Withdraw.findAll({
+    //             where: { uid },
+    //         });
+
+    //         return res.status(200).json({
+    //             message: "Withdrawal requests retrieved successfully",
+    //             data: withdrawRequests,
+    //         });
+    //     } catch (error) {
+    //         console.error(error);
+    //         return res.status(500).json({ message: "Internal server error" });
+    //     }
+    // }
+
+    async GetWithdrawRequests(req: Request, res: Response): Promise<Response> {
+        try {
+            const uid = req.query.uid;
+            let withdrawRequests;
+    
+            if (uid) {
+                withdrawRequests = await Withdraw.findAll({
+                    where: { uid },
+                });
+                return res.status(200).json({
+                    message: `Withdrawal requests for user ${uid} retrieved successfully`,
+                    data: withdrawRequests,
+                });
+            } else {
+                if (req.role != "admin") {
+                    return res.status(403).json({ message: "Unauthorized" });
+                }
+
+                withdrawRequests = await Withdraw.findAll();
+                return res.status(200).json({
+                    message: "All withdrawal requests retrieved successfully",
+                    data: withdrawRequests,
+                });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Internal server error" });
+        }
+    }
+    
 }
 
 export default new WithdrawController();

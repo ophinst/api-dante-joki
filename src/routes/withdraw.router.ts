@@ -4,7 +4,7 @@ import AuthMiddleware from "../middleware/auth.middleware";
 
 export const WithdrawRouter = express.Router();
 
-WithdrawRouter.get("/", AuthMiddleware.VerifyRoles, WithdrawController.GetAllWithdrawRequest);
+WithdrawRouter.get("/", WithdrawController.GetWithdrawRequests);
 WithdrawRouter.get("/:id", AuthMiddleware.VerifyRoles, WithdrawController.GetWithdrawRequestById);
 
 WithdrawRouter.post("/", WithdrawController.CreateWithdrawRequest);
